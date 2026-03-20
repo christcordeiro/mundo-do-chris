@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundo do Chris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#faf9f6;
+  --surface:#ffffff;
+  --border:#e8e6e1;
+  --border2:#d0cec8;
+  --text:#1a1916;
+  --muted:#6b6960;
+  --light:#f0ede8;
+  --accent:#1a1916;
+  --radius:4px;
+  --serif:'Playfair Display',Georgia,serif;
+  --body:'Source Serif 4',Georgia,serif;
+  --sans:'DM Sans',sans-serif;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.7;
+  min-height:100vh;
+}
+
+/* ===== VIEWS ===== */
+.view{display:none;animation:fadeIn .35s ease both}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== HEADER ===== */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(250,249,246,0.95);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+  padding:0 40px;
+}
+.header-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;
+}
+.logo{
+  font-family:var(--serif);
+  font-size:1.5rem;
+  font-weight:900;
+  color:var(--text);
+  text-decoration:none;
+  letter-spacing:-0.5px;
+  cursor:pointer;
+}
+.logo span{
+  font-style:italic;
+  font-weight:700;
+}
+.header-sub{
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.header-right{display:flex;align-items:center;gap:16px}
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb{
+  font-family:var(--sans);
+  font-size:12px;
+  color:var(--muted);
+  display:flex;align-items:center;gap:8px;
+  padding:14px 40px;
+  max-width:1280px;margin:0 auto;
+  letter-spacing:.5px;
+}
+.breadcrumb span{cursor:pointer;transition:color .2s}
+.breadcrumb span:hover{color:var(--text)}
+.breadcrumb i{color:var(--border2);font-style:normal}
+
+/* ===== HOME PAGE ===== */
+.home-hero{
+  max-width:1200px;margin:0 auto;
+  padding:60px 40px 48px;
+  border-bottom:2px solid var(--text);
+}
+.home-eyebrow{
+  font-family:var(--sans);
+  font-size:11px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:16px;
+}
+.home-title{
+  font-family:var(--serif);
+  font-size:clamp(2.8rem,6vw,5.5rem);
+  font-weight:900;
+  line-height:1.05;
+  letter-spacing:-1.5px;
+  color:var(--text);
+  margin-bottom:20px;
+}
+.home-title em{font-style:italic;font-weight:700}
+.home-desc{
+  font-family:var(--body);
+  font-size:1.05rem;
+  color:var(--muted);
+  max-width:560px;
+  font-weight:300;
+  line-height:1.7;
+}
+
+.home-section-label{
+  max-width:1200px;margin:0 auto;
+  padding:36px 40px 20px;
+  display:flex;align-items:center;gap:16px;
+}
+.home-section-label h2{
+  font-family:var(--sans);
+  font-size:11px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);
+}
+.home-section-label::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+
+/* Grid de categorias */
+.cats-grid{
+  max-width:1200px;margin:0 auto;
+  padding:0 40px 80px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+}
+
+.cat-card{
+  background:var(--surface);
+  cursor:pointer;
+  overflow:hidden;
+  transition:background .2s;
+  position:relative;
+}
+.cat-card:hover{background:var(--light)}
+.cat-card:hover .cat-card-img img{transform:scale(1.04)}
+
+.cat-card-img{
+  width:100%;height:200px;
+  overflow:hidden;
+  background:var(--light);
+  position:relative;
+}
+.cat-card-img img{
+  width:100%;height:100%;
+  object-fit:cover;
+  transition:transform .5s ease;
+  display:block;
+}
+.cat-card-img-placeholder{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3rem;
+  background:var(--light);
+  color:var(--border2);
+}
+
+.cat-card-body{padding:22px 24px 24px}
+.cat-card-name{
+  font-family:var(--serif);
+  font-size:1.5rem;font-weight:700;
+  line-height:1.2;margin-bottom:6px;
+  letter-spacing:-.3px;
+}
+.cat-card-desc{
+  font-size:.875rem;color:var(--muted);
+  font-family:var(--sans);font-weight:400;
+  line-height:1.5;margin-bottom:14px;
+}
+.cat-card-meta{
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cat-card-count{
+  font-family:var(--sans);font-size:12px;
+  color:var(--muted);font-weight:500;
+  letter-spacing:.5px;
+}
+.cat-card-arrow{
+  font-size:18px;color:var(--muted);
+  transition:transform .2s,color .2s;
+}
+.cat-card:hover .cat-card-arrow{transform:translateX(4px);color:var(--text)}
+
+.empty-home{
+  max-width:1200px;margin:0 auto;
+  padding:80px 40px;text-align:center;
+  color:var(--muted);font-family:var(--sans);
+}
+.empty-home-icon{font-size:3rem;margin-bottom:16px;opacity:.3}
+.empty-home h3{font-family:var(--serif);font-size:1.4rem;margin-bottom:8px;color:var(--text)}
+.empty-home p{font-size:.9rem}
+
+/* ===== CATEGORIA PAGE ===== */
+.cat-hero{
+  max-width:1200px;margin:0 auto;
+  padding:48px 40px 36px;
+  border-bottom:2px solid var(--text);
+}
+.cat-hero-img{
+  width:100%;height:320px;
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin-bottom:28px;
+  background:var(--light);
+}
+.cat-hero-img img{width:100%;height:100%;object-fit:cover;display:block}
+.cat-hero-img-placeholder{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:5rem;
+}
+.cat-hero-eyebrow{
+  font-family:var(--sans);font-size:11px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;color:var(--muted);
+  margin-bottom:10px;
+}
+.cat-hero-name{
+  font-family:var(--serif);
+  font-size:clamp(2rem,5vw,3.8rem);
+  font-weight:900;letter-spacing:-1px;line-height:1.1;
+  margin-bottom:12px;
+}
+.cat-hero-desc{
+  font-size:1rem;color:var(--muted);font-weight:300;
+  max-width:600px;line-height:1.7;
+}
+
+/* Sub-categorias */
+.subcats-section{
+  max-width:1200px;margin:0 auto;
+  padding:40px 40px 80px;
+}
+.subcats-label{
+  font-family:var(--sans);font-size:11px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;color:var(--muted);
+  margin-bottom:24px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.subcats-list{display:flex;flex-direction:column;gap:1px;background:var(--border)}
+
+.subcat-item{
+  background:var(--surface);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px;
+  cursor:pointer;
+  transition:background .2s;
+  gap:16px;
+}
+.subcat-item:hover{background:var(--light)}
+.subcat-item-left{flex:1}
+.subcat-item-name{
+  font-family:var(--serif);font-size:1.15rem;font-weight:700;
+  margin-bottom:4px;letter-spacing:-.2px;
+}
+.subcat-item-desc{font-size:.85rem;color:var(--muted);font-family:var(--sans);font-weight:400}
+.subcat-item-right{
+  display:flex;align-items:center;gap:12px;
+  flex-shrink:0;
+}
+.subcat-count{
+  font-family:var(--sans);font-size:12px;color:var(--muted);
+  font-weight:500;white-space:nowrap;
+}
+.subcat-arrow{font-size:16px;color:var(--muted);transition:transform .2s,color .2s}
+.subcat-item:hover .subcat-arrow{transform:translateX(4px);color:var(--text)}
+
+.empty-cat{
+  padding:60px 0;text-align:center;
+  color:var(--muted);font-family:var(--sans);
+}
+.empty-cat p{font-size:.9rem}
+
+/* ===== SUBCATEGORIA PAGE ===== */
+.subcat-hero{
+  max-width:1200px;margin:0 auto;
+  padding:40px 40px 32px;
+  border-bottom:1px solid var(--border);
+}
+.subcat-hero-path{
+  font-family:var(--sans);font-size:12px;color:var(--muted);
+  margin-bottom:10px;letter-spacing:.5px;
+}
+.subcat-hero-name{
+  font-family:var(--serif);font-size:clamp(1.8rem,4vw,3rem);
+  font-weight:900;letter-spacing:-.8px;line-height:1.1;margin-bottom:10px;
+}
+.subcat-hero-desc{
+  font-size:.95rem;color:var(--muted);font-weight:300;max-width:560px;line-height:1.7;
+}
+
+/* Grid de curiosidades */
+.curio-grid{
+  max-width:1200px;margin:0 auto;
+  padding:40px 40px 80px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:32px;
+}
+.curio-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  transition:box-shadow .25s,transform .25s;
+  cursor:default;
+}
+.curio-card:hover{box-shadow:0 8px 32px rgba(0,0,0,0.08);transform:translateY(-3px)}
+
+.curio-card-cover{
+  width:100%;height:200px;overflow:hidden;background:var(--light);
+}
+.curio-card-cover img{width:100%;height:100%;object-fit:cover;display:block}
+
+.curio-card-body{padding:22px}
+.curio-card-tag{
+  font-family:var(--sans);font-size:10px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;color:var(--muted);
+  margin-bottom:10px;display:block;
+}
+.curio-card-title{
+  font-family:var(--serif);font-size:1.2rem;font-weight:700;
+  line-height:1.3;margin-bottom:12px;letter-spacing:-.2px;
+}
+.curio-card-block-p{
+  font-size:.875rem;color:var(--muted);line-height:1.7;
+  font-weight:300;margin-bottom:10px;font-family:var(--body);
+}
+.curio-card-block-p:last-child{margin-bottom:0}
+.curio-card-block-img{
+  width:calc(100% + 44px);margin:12px -22px;
+  display:block;max-height:220px;object-fit:cover;
+}
+
+.empty-subcat{
+  grid-column:1/-1;padding:60px;text-align:center;
+  color:var(--muted);font-family:var(--sans);
+}
+
+/* ===== FOOTER ===== */
+footer{
+  border-top:2px solid var(--text);
+  padding:32px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:100%;
+}
+.footer-inner{
+  max-width:1200px;margin:0 auto;width:100%;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.footer-logo{font-family:var(--serif);font-size:1.1rem;font-weight:900;color:var(--text)}
+.footer-copy{font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.5px}
+
+/* ===== ADMIN TRIGGER ===== */
+.admin-trigger{
+  position:fixed;bottom:24px;right:24px;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--text);color:var(--bg);
+  font-size:18px;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  z-index:100;box-shadow:0 4px 16px rgba(0,0,0,0.2);
+  transition:transform .2s,box-shadow .2s;
+}
+.admin-trigger:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(0,0,0,0.25)}
+
+/* ===== ADMIN MODAL ===== */
+.admin-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.55);
+  z-index:200;display:none;align-items:flex-start;
+  justify-content:center;padding:24px 16px;
+  overflow-y:auto;backdrop-filter:blur(4px);
+}
+.admin-overlay.open{display:flex}
+.admin-modal{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:12px;width:100%;max-width:660px;
+  overflow:hidden;animation:slideUp .3s ease both;margin:auto;
+  box-shadow:0 24px 80px rgba(0,0,0,0.18);
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+.admin-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 24px;border-bottom:1px solid var(--border);
+  background:var(--light);
+}
+.admin-header h2{
+  font-family:var(--serif);font-size:1.2rem;font-weight:700;color:var(--text);
+}
+.admin-close{
+  width:32px;height:32px;border-radius:50%;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--muted);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.admin-close:hover{background:var(--border);color:var(--text)}
+.admin-body{padding:22px 24px;max-height:80vh;overflow-y:auto}
+
+/* Admin login */
+.admin-login{text-align:center;padding:8px 0 16px}
+.admin-login p{color:var(--muted);font-family:var(--sans);font-size:14px;margin-bottom:18px}
+
+/* Admin inputs */
+.adm-label{
+  display:block;font-family:var(--sans);font-size:11px;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+  margin-bottom:6px;margin-top:2px;
+}
+.adm-input{
+  width:100%;background:var(--bg);border:1px solid var(--border2);
+  border-radius:8px;padding:11px 14px;color:var(--text);
+  font-family:var(--sans);font-size:14px;outline:none;
+  transition:border-color .2s;margin-bottom:12px;
+}
+.adm-input:focus{border-color:var(--text)}
+.adm-input::placeholder{color:var(--muted)}
+.adm-select{
+  width:100%;background:var(--bg);border:1px solid var(--border2);
+  border-radius:8px;padding:11px 14px;color:var(--text);
+  font-family:var(--sans);font-size:14px;outline:none;
+  transition:border-color .2s;margin-bottom:12px;
+  appearance:none;cursor:pointer;
+}
+.adm-select:focus{border-color:var(--text)}
+.adm-textarea{
+  width:100%;background:var(--bg);border:1px solid var(--border2);
+  border-radius:8px;padding:11px 14px;color:var(--text);
+  font-family:var(--sans);font-size:14px;outline:none;
+  transition:border-color .2s;margin-bottom:12px;
+  resize:vertical;min-height:80px;line-height:1.5;
+}
+.adm-textarea:focus{border-color:var(--text)}
+.adm-textarea::placeholder{color:var(--muted)}
+
+/* Admin buttons */
+.adm-btn{
+  width:100%;padding:13px;background:var(--text);color:var(--bg);
+  border:none;border-radius:8px;font-family:var(--sans);font-size:14px;
+  font-weight:600;cursor:pointer;transition:opacity .2s;margin-top:4px;
+}
+.adm-btn:hover{opacity:.85}
+.adm-btn-ghost{
+  padding:9px 16px;background:transparent;color:var(--muted);
+  border:1px solid var(--border2);border-radius:8px;
+  font-family:var(--sans);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .2s;
+}
+.adm-btn-ghost:hover{color:var(--text);border-color:var(--text)}
+.adm-btn-danger{
+  padding:7px 14px;background:transparent;color:#cc3333;
+  border:1px solid rgba(200,50,50,.2);border-radius:8px;
+  font-family:var(--sans);font-size:12px;font-weight:500;
+  cursor:pointer;transition:all .2s;
+}
+.adm-btn-danger:hover{background:rgba(200,50,50,.08)}
+
+/* Admin tabs */
+.adm-tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:14px;flex-wrap:wrap}
+.adm-tab{
+  padding:7px 14px;border-radius:6px;border:1px solid transparent;
+  background:transparent;color:var(--muted);font-family:var(--sans);
+  font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;
+}
+.adm-tab:hover{color:var(--text);background:var(--light)}
+.adm-tab.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.adm-panel{display:none}
+.adm-panel.active{display:block}
+
+/* Admin feedback */
+.adm-success{background:#f0faf4;border:1px solid #a8d5b5;border-radius:8px;padding:11px 14px;font-size:13px;color:#2d6a4f;margin-bottom:14px;display:none;font-family:var(--sans)}
+.adm-success.visible{display:block}
+.adm-error{background:#fdf0f0;border:1px solid #e8b4b4;border-radius:8px;padding:11px 14px;font-size:13px;color:#8b0000;margin-bottom:14px;display:none;font-family:var(--sans)}
+.adm-error.visible{display:block}
+
+/* Admin listas */
+.adm-list{list-style:none;margin-bottom:14px}
+.adm-list li{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:12px;padding:12px 0;border-bottom:1px solid var(--border);
+  font-size:13px;font-family:var(--sans);
+}
+.adm-list li:last-child{border-bottom:none}
+.adm-list li strong{display:block;color:var(--text);margin-bottom:2px;font-size:13px}
+.adm-list li span{color:var(--muted);font-size:12px}
+.adm-list-actions{display:flex;gap:6px;flex-shrink:0}
+
+.adm-section-title{
+  font-family:var(--sans);font-size:10px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;color:var(--muted);
+  margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);
+}
+
+/* Upload area no admin */
+.adm-upload{
+  width:100%;border:1px dashed var(--border2);border-radius:8px;
+  padding:18px;text-align:center;cursor:pointer;
+  transition:border-color .2s;margin-bottom:12px;
+  background:var(--bg);position:relative;
+}
+.adm-upload:hover{border-color:var(--text)}
+.adm-upload input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.adm-upload p{font-size:12px;color:var(--muted);font-family:var(--sans);margin:4px 0 0}
+.adm-upload strong{font-family:var(--sans);font-size:13px;color:var(--text)}
+.adm-upload-preview{width:100%;max-height:140px;object-fit:cover;border-radius:6px;display:none;margin-bottom:6px}
+.adm-upload-clear{font-size:11px;color:#cc3333;background:none;border:none;cursor:pointer;font-family:var(--sans);display:none}
+
+/* Blocos editor */
+.blocos-editor{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.bloco{background:var(--bg);border:1px solid var(--border2);border-radius:8px;overflow:hidden}
+.bloco-header{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;border-bottom:1px solid var(--border);background:var(--light)}
+.bloco-tipo{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-family:var(--sans)}
+.bloco-acoes{display:flex;gap:4px}
+.bloco-btn{width:24px;height:24px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.bloco-btn:hover{color:var(--text);border-color:var(--text)}
+.bloco-btn.del:hover{color:#cc3333;border-color:rgba(200,50,50,.3)}
+.bloco-body{padding:11px}
+.bloco textarea{width:100%;background:transparent;border:none;color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.6;resize:vertical;min-height:65px;outline:none}
+.bloco textarea::placeholder{color:var(--muted)}
+.bloco-img-area{border:1px dashed var(--border2);border-radius:6px;padding:14px;text-align:center;cursor:pointer;position:relative;transition:border-color .2s}
+.bloco-img-area:hover{border-color:var(--text)}
+.bloco-img-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.bloco-img-area p{font-size:11px;color:var(--muted);margin:3px 0 0;font-family:var(--sans)}
+.bloco-img-area strong{font-family:var(--sans);font-size:12px;color:var(--text)}
+.bloco-img-preview{width:100%;max-height:140px;object-fit:cover;border-radius:4px;display:none}
+.bloco-img-clear{font-size:11px;color:#cc3333;background:none;border:none;cursor:pointer;font-family:var(--sans);margin-top:5px;display:none}
+.add-bloco-bar{display:flex;gap:8px;margin-bottom:12px}
+.add-bloco-btn{flex:1;padding:8px;border-radius:6px;border:1px dashed var(--border2);background:transparent;color:var(--muted);font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px}
+.add-bloco-btn:hover{border-color:var(--text);color:var(--text);background:var(--light)}
+
+/* Exportar */
+.export-box{margin-top:20px;padding:18px;border:1px solid var(--border2);border-radius:8px;background:var(--light)}
+.export-box p{font-size:13px;color:var(--muted);font-family:var(--sans);margin-bottom:14px;line-height:1.6}
+
+@media(max-width:768px){
+  header{padding:0 20px}
+  .breadcrumb{padding:12px 20px}
+  .home-hero,.cat-hero,.subcats-section,.subcat-hero{padding-left:20px;padding-right:20px}
+  .cats-grid,.curio-grid{padding-left:20px;padding-right:20px;grid-template-columns:1fr}
+  .home-section-label{padding-left:20px;padding-right:20px}
+  footer{padding:24px 20px}
+  .cat-hero-img{height:220px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <a class="logo" onclick="goHome()">Mundo <em>do Chris</em></a>
+      <div class="header-sub">Curiosidades &amp; Conhecimento</div>
+    </div>
+    <div class="header-right">
+      <span id="header-breadcrumb" style="font-family:var(--sans);font-size:12px;color:var(--muted)"></span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== VIEW: HOME ===== -->
+<div class="view active" id="view-home">
+  <div class="home-hero">
+    <div class="home-eyebrow">Mundo do Chris</div>
+    <h1 class="home-title">O Mundo é<br><em>Mais Estranho</em><br>do que Parece</h1>
+    <p class="home-desc">Explore categorias de curiosidades, mergulhe nos temas e descubra fatos que vão te surpreender.</p>
+  </div>
+  <div class="home-section-label"><h2>Categorias</h2></div>
+  <div class="cats-grid" id="cats-grid">
+    <div class="empty-home" id="empty-home" style="grid-column:1/-1;display:none">
+      <div class="empty-home-icon">📂</div>
+      <h3>Nenhuma categoria ainda</h3>
+      <p>Abra o painel admin (⚙️) e crie sua primeira categoria.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VIEW: CATEGORIA ===== -->
+<div class="view" id="view-cat">
+  <div class="cat-hero">
+    <div class="cat-hero-img" id="cat-hero-img"></div>
+    <div class="cat-hero-eyebrow">Categoria</div>
+    <h1 class="cat-hero-name" id="cat-hero-name"></h1>
+    <p class="cat-hero-desc" id="cat-hero-desc"></p>
+  </div>
+  <div class="subcats-section">
+    <div class="subcats-label">Sub-categorias</div>
+    <div class="subcats-list" id="subcats-list"></div>
+    <div class="empty-cat" id="empty-cat" style="display:none"><p>Nenhuma sub-categoria ainda. Adicione no painel admin.</p></div>
+  </div>
+</div>
+
+<!-- ===== VIEW: SUBCATEGORIA ===== -->
+<div class="view" id="view-subcat">
+  <div class="subcat-hero">
+    <div class="subcat-hero-path" id="subcat-hero-path"></div>
+    <h1 class="subcat-hero-name" id="subcat-hero-name"></h1>
+    <p class="subcat-hero-desc" id="subcat-hero-desc"></p>
+  </div>
+  <div class="curio-grid" id="curio-grid">
+    <div class="empty-subcat" id="empty-subcat" style="display:none">
+      <p style="font-size:.9rem">Nenhuma curiosidade ainda. Adicione no painel admin.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Mundo do Chris</span>
+    <span class="footer-copy">Curiosidades &amp; Conhecimento</span>
+  </div>
+</footer>
+
+<!-- Admin trigger -->
+<button class="admin-trigger" onclick="openAdmin()" title="Painel Admin">⚙</button>
+
+<!-- ===== ADMIN MODAL ===== -->
+<div class="admin-overlay" id="admin-overlay" onclick="closeAdminOverlay(event)">
+  <div class="admin-modal">
+    <div class="admin-header">
+      <h2 id="admin-title">Painel Admin</h2>
+      <button class="admin-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="admin-body">
+
+      <!-- LOGIN -->
+      <div id="adm-login-panel">
+        <div class="admin-login">
+          <p>Digite a senha para acessar o painel.</p>
+          <input class="adm-input" type="password" id="adm-senha" placeholder="Senha..." onkeydown="if(event.key==='Enter')doLogin()">
+          <div class="adm-error" id="adm-login-error">Senha incorreta.</div>
+          <button class="adm-btn" onclick="doLogin()">Entrar</button>
+        </div>
+      </div>
+
+      <!-- PAINEL -->
+      <div id="adm-painel" style="display:none">
+        <div class="adm-tabs">
+          <button class="adm-tab active" onclick="admTab('categorias',this)">📂 Categorias</button>
+          <button class="adm-tab" onclick="admTab('subcategorias',this)">📁 Sub-categorias</button>
+          <button class="adm-tab" onclick="admTab('curiosidades',this)">✏️ Curiosidades</button>
+          <button class="adm-tab" onclick="admTab('gerenciar',this)">⚙️ Gerenciar</button>
+        </div>
+
+        <!-- TAB: CATEGORIAS -->
+        <div class="adm-panel active" id="tab-categorias">
+          <div class="adm-success" id="suc-cat">✓ Categoria salva!</div>
+          <label class="adm-label">Nome da categoria</label>
+          <input class="adm-input" id="cat-nome" placeholder="Ex: História, Esportes, Ciência...">
+          <label class="adm-label">Descrição (opcional)</label>
+          <input class="adm-input" id="cat-desc" placeholder="Uma breve descrição da categoria...">
+          <label class="adm-label">Imagem de destaque (opcional)</label>
+          <div class="adm-upload" id="cat-upload">
+            <input type="file" accept="image/*" onchange="uploadCatImg(this)">
+            <img class="adm-upload-preview" id="cat-img-prev">
+            <button type="button" class="adm-upload-clear" id="cat-img-clear" onclick="clearCatImg()">✕ Remover</button>
+            <div id="cat-upload-ph"><strong>Clique para escolher</strong><p>Recomendado: 800×400px</p></div>
+          </div>
+          <label class="adm-label">Emoji (opcional, aparece se não tiver imagem)</label>
+          <input class="adm-input" id="cat-emoji" placeholder="Ex: 📜 ⚽ ⚖️ 🔬">
+          <button class="adm-btn" onclick="salvarCategoria()">Salvar Categoria</button>
+        </div>
+
+        <!-- TAB: SUB-CATEGORIAS -->
+        <div class="adm-panel" id="tab-subcategorias">
+          <div class="adm-success" id="suc-sub">✓ Sub-categoria salva!</div>
+          <label class="adm-label">Categoria pai</label>
+          <select class="adm-select" id="sub-cat-pai"></select>
+          <label class="adm-label">Nome da sub-categoria</label>
+          <input class="adm-input" id="sub-nome" placeholder="Ex: Direito Penal, Segunda Guerra...">
+          <label class="adm-label">Descrição (opcional)</label>
+          <input class="adm-input" id="sub-desc" placeholder="Descreva o tema desta sub-categoria...">
+          <button class="adm-btn" onclick="salvarSubcat()">Salvar Sub-categoria</button>
+        </div>
+
+        <!-- TAB: CURIOSIDADES -->
+        <div class="adm-panel" id="tab-curiosidades">
+          <div class="adm-success" id="suc-curio">✓ Curiosidade publicada!</div>
+          <label class="adm-label">Categoria</label>
+          <select class="adm-select" id="curio-cat" onchange="atualizarSubcatSelect()"></select>
+          <label class="adm-label">Sub-categoria</label>
+          <select class="adm-select" id="curio-sub"></select>
+          <label class="adm-label">Título</label>
+          <input class="adm-input" id="curio-titulo" placeholder="Título da curiosidade...">
+          <label class="adm-label">Conteúdo — adicione textos e imagens na ordem que quiser</label>
+          <div class="blocos-editor" id="blocos-editor"></div>
+          <div class="add-bloco-bar">
+            <button type="button" class="add-bloco-btn" onclick="adicionarBloco('texto')">✏️ Texto</button>
+            <button type="button" class="add-bloco-btn" onclick="adicionarBloco('imagem')">🖼️ Imagem</button>
+          </div>
+          <button class="adm-btn" onclick="salvarCuriosidade()">Publicar Curiosidade</button>
+        </div>
+
+        <!-- TAB: GERENCIAR -->
+        <div class="adm-panel" id="tab-gerenciar">
+          <div class="adm-section-title">Categorias</div>
+          <ul class="adm-list" id="ger-cats"></ul>
+          <div class="adm-section-title" style="margin-top:16px">Sub-categorias</div>
+          <ul class="adm-list" id="ger-subs"></ul>
+          <div class="adm-section-title" style="margin-top:16px">Curiosidades</div>
+          <ul class="adm-list" id="ger-curios"></ul>
+          <div class="export-box">
+            <div class="adm-section-title" style="margin-top:0">Publicar para todos</div>
+            <p>Clique em <strong>Exportar site</strong> para baixar o arquivo atualizado. Depois faça o upload no GitHub para que todos os visitantes vejam.</p>
+            <button class="adm-btn" onclick="exportarSite()">⬇ Exportar site (index.html)</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========== DADOS ========== */
+const SENHA = 'chris123';
+let logado = false;
+
+// Estrutura: { id, nome, desc, img, emoji }
+let categorias = [];
+// Estrutura: { id, catId, nome, desc }
+let subcategorias = [];
+// Estrutura: { id, subcatId, titulo, blocos:[{id,tipo,valor}] }
+let curiosidades = [];
+
+let nextId = 1;
+const uid = () => nextId++;
+
+/* ========== NAVEGAÇÃO ========== */
+let viewAtual = 'home';
+let catAtual = null;
+let subcatAtual = null;
+
+function goHome() {
+  catAtual = null; subcatAtual = null;
+  showView('home');
+  renderHome();
+}
+
+function goCategoria(catId) {
+  catAtual = categorias.find(c => c.id === catId);
+  subcatAtual = null;
+  showView('cat');
+  renderCat();
+}
+
+function goSubcategoria(subId) {
+  subcatAtual = subcategorias.find(s => s.id === subId);
+  showView('subcat');
+  renderSubcat();
+}
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  viewAtual = name;
+  window.scrollTo(0,0);
+}
+
+/* ========== RENDER HOME ========== */
+function renderHome() {
+  const grid = document.getElementById('cats-grid');
+  const empty = document.getElementById('empty-home');
+  grid.innerHTML = '';
+  if (categorias.length === 0) {
+    grid.appendChild(empty);
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  categorias.forEach((cat, i) => {
+    const subs = subcategorias.filter(s => s.catId === cat.id);
+    const curios = curiosidades.filter(c => subs.some(s => s.id === c.subcatId));
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.style.animationDelay = (i * 0.06) + 's';
+    card.onclick = () => goCategoria(cat.id);
+    card.innerHTML = `
+      <div class="cat-card-img">
+        ${cat.img ? `<img src="${cat.img}" alt="${cat.nome}">` : `<div class="cat-card-img-placeholder">${cat.emoji || '📂'}</div>`}
+      </div>
+      <div class="cat-card-body">
+        <div class="cat-card-name">${cat.nome}</div>
+        <div class="cat-card-desc">${cat.desc || 'Explore as curiosidades desta categoria.'}</div>
+        <div class="cat-card-meta">
+          <span class="cat-card-count">${subs.length} sub-categoria${subs.length !== 1 ? 's' : ''} · ${curios.length} curiosidade${curios.length !== 1 ? 's' : ''}</span>
+          <span class="cat-card-arrow">→</span>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ========== RENDER CATEGORIA ========== */
+function renderCat() {
+  if (!catAtual) return;
+  const imgEl = document.getElementById('cat-hero-img');
+  imgEl.innerHTML = catAtual.img
+    ? `<img src="${catAtual.img}" alt="${catAtual.nome}">`
+    : `<div class="cat-hero-img-placeholder">${catAtual.emoji || '📂'}</div>`;
+  document.getElementById('cat-hero-name').textContent = catAtual.nome;
+  document.getElementById('cat-hero-desc').textContent = catAtual.desc || '';
+
+  const subs = subcategorias.filter(s => s.catId === catAtual.id);
+  const list = document.getElementById('subcats-list');
+  const empty = document.getElementById('empty-cat');
+  list.innerHTML = '';
+  if (subs.length === 0) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  subs.forEach(sub => {
+    const curios = curiosidades.filter(c => c.subcatId === sub.id);
+    const item = document.createElement('div');
+    item.className = 'subcat-item';
+    item.onclick = () => goSubcategoria(sub.id);
+    item.innerHTML = `
+      <div class="subcat-item-left">
+        <div class="subcat-item-name">${sub.nome}</div>
+        <div class="subcat-item-desc">${sub.desc || ''}</div>
+      </div>
+      <div class="subcat-item-right">
+        <span class="subcat-count">${curios.length} curiosidade${curios.length !== 1 ? 's' : ''}</span>
+        <span class="subcat-arrow">→</span>
+      </div>`;
+    list.appendChild(item);
+  });
+}
+
+/* ========== RENDER SUBCATEGORIA ========== */
+function renderSubcat() {
+  if (!subcatAtual) return;
+  const cat = categorias.find(c => c.id === subcatAtual.catId);
+  document.getElementById('subcat-hero-path').textContent = (cat ? cat.nome + ' › ' : '') + subcatAtual.nome;
+  document.getElementById('subcat-hero-name').textContent = subcatAtual.nome;
+  document.getElementById('subcat-hero-desc').textContent = subcatAtual.desc || '';
+
+  const curios = curiosidades.filter(c => c.subcatId === subcatAtual.id);
+  const grid = document.getElementById('curio-grid');
+  const empty = document.getElementById('empty-subcat');
+  grid.innerHTML = '';
+  if (curios.length === 0) { grid.appendChild(empty); empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+
+  curios.forEach((curio, i) => {
+    const card = document.createElement('div');
+    card.className = 'curio-card';
+    card.style.animationDelay = (i * 0.06) + 's';
+
+    // Verifica se tem imagem de capa (primeiro bloco imagem)
+    const primeiraImg = curio.blocos.find(b => b.tipo === 'imagem' && b.valor);
+    let inner = '';
+    let primeiraImgUsada = false;
+
+    if (primeiraImg) {
+      inner += `<div class="curio-card-cover"><img src="${primeiraImg.valor}" alt="${curio.titulo}"></div>`;
+      primeiraImgUsada = true;
+    }
+
+    inner += `<div class="curio-card-body">`;
+    const sub = subcategorias.find(s => s.id === curio.subcatId);
+    const catNome = cat ? cat.nome : '';
+    inner += `<span class="curio-card-tag">${catNome}${sub ? ' · ' + sub.nome : ''}</span>`;
+    inner += `<div class="curio-card-title">${curio.titulo}</div>`;
+
+    curio.blocos.forEach(b => {
+      if (b.tipo === 'imagem' && b.valor && b === primeiraImg && primeiraImgUsada) return;
+      if (b.tipo === 'texto' && b.valor && b.valor.trim()) {
+        inner += `<p class="curio-card-block-p">${b.valor.trim()}</p>`;
+      } else if (b.tipo === 'imagem' && b.valor) {
+        inner += `<img class="curio-card-block-img" src="${b.valor}" alt="">`;
+      }
+    });
+    inner += `</div>`;
+    card.innerHTML = inner;
+    grid.appendChild(card);
+  });
+}
+
+/* ========== ADMIN ========== */
+function openAdmin() {
+  document.getElementById('admin-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (!logado) {
+    document.getElementById('adm-senha').value = '';
+    document.getElementById('adm-login-error').classList.remove('visible');
+  }
+  if (blocos.length === 0) adicionarBloco('texto');
+}
+
+function closeAdmin() {
+  document.getElementById('admin-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeAdminOverlay(e) {
+  if (e.target === document.getElementById('admin-overlay')) closeAdmin();
+}
+
+function doLogin() {
+  if (document.getElementById('adm-senha').value === SENHA) {
+    logado = true;
+    document.getElementById('adm-login-panel').style.display = 'none';
+    document.getElementById('adm-painel').style.display = 'block';
+    document.getElementById('admin-title').textContent = 'Painel Admin ✓';
+    atualizarSelects();
+  } else {
+    document.getElementById('adm-login-error').classList.add('visible');
+  }
+}
+
+function admTab(tab, el) {
+  document.querySelectorAll('.adm-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.adm-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'gerenciar') renderGerenciar();
+  if (tab === 'subcategorias' || tab === 'curiosidades') atualizarSelects();
+}
+
+function showSuccess(id) {
+  const el = document.getElementById(id);
+  el.classList.add('visible');
+  setTimeout(() => el.classList.remove('visible'), 3000);
+}
+
+/* ========== CATEGORIAS ========== */
+let catImgData = null;
+
+function uploadCatImg(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    catImgData = e.target.result;
+    document.getElementById('cat-img-prev').src = catImgData;
+    document.getElementById('cat-img-prev').style.display = 'block';
+    document.getElementById('cat-img-clear').style.display = 'block';
+    document.getElementById('cat-upload-ph').style.display = 'none';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function clearCatImg() {
+  catImgData = null;
+  document.getElementById('cat-img-prev').src = '';
+  document.getElementById('cat-img-prev').style.display = 'none';
+  document.getElementById('cat-img-clear').style.display = 'none';
+  document.getElementById('cat-upload-ph').style.display = 'block';
+}
+
+function salvarCategoria() {
+  const nome = document.getElementById('cat-nome').value.trim();
+  if (!nome) { alert('Digite o nome da categoria.'); return; }
+  categorias.push({
+    id: uid(),
+    nome,
+    desc: document.getElementById('cat-desc').value.trim(),
+    img: catImgData,
+    emoji: document.getElementById('cat-emoji').value.trim() || '📂'
+  });
+  document.getElementById('cat-nome').value = '';
+  document.getElementById('cat-desc').value = '';
+  document.getElementById('cat-emoji').value = '';
+  clearCatImg();
+  atualizarSelects();
+  renderHome();
+  showSuccess('suc-cat');
+}
+
+/* ========== SUBCATEGORIAS ========== */
+function salvarSubcat() {
+  const catId = parseInt(document.getElementById('sub-cat-pai').value);
+  const nome = document.getElementById('sub-nome').value.trim();
+  if (!catId || !nome) { alert('Selecione a categoria e digite o nome.'); return; }
+  subcategorias.push({
+    id: uid(),
+    catId,
+    nome,
+    desc: document.getElementById('sub-desc').value.trim()
+  });
+  document.getElementById('sub-nome').value = '';
+  document.getElementById('sub-desc').value = '';
+  atualizarSelects();
+  if (catAtual && catAtual.id === catId) renderCat();
+  showSuccess('suc-sub');
+}
+
+/* ========== BLOCOS EDITOR ========== */
+let blocos = [];
+let blocoId = 0;
+
+function adicionarBloco(tipo) {
+  blocos.push({ id: blocoId++, tipo, valor: null });
+  renderBlocos();
+}
+
+function removerBloco(id) {
+  blocos = blocos.filter(b => b.id !== id);
+  renderBlocos();
+}
+
+function moverBloco(id, dir) {
+  const idx = blocos.findIndex(b => b.id === id);
+  const novo = idx + dir;
+  if (novo < 0 || novo >= blocos.length) return;
+  [blocos[idx], blocos[novo]] = [blocos[novo], blocos[idx]];
+  renderBlocos();
+}
+
+function renderBlocos() {
+  const editor = document.getElementById('blocos-editor');
+  editor.innerHTML = '';
+  blocos.forEach((b, i) => {
+    const div = document.createElement('div');
+    div.className = 'bloco';
+    if (b.tipo === 'texto') {
+      div.innerHTML = `
+        <div class="bloco-header">
+          <span class="bloco-tipo">✏️ Texto</span>
+          <div class="bloco-acoes">
+            ${i>0?`<button class="bloco-btn" onclick="moverBloco(${b.id},-1)">↑</button>`:''}
+            ${i<blocos.length-1?`<button class="bloco-btn" onclick="moverBloco(${b.id},1)">↓</button>`:''}
+            <button class="bloco-btn del" onclick="removerBloco(${b.id})">✕</button>
+          </div>
+        </div>
+        <div class="bloco-body">
+          <textarea placeholder="Escreva o texto aqui..." oninput="blocos[${i}].valor=this.value">${b.valor||''}</textarea>
+        </div>`;
+    } else {
+      const tem = b.valor && b.valor.startsWith('data:');
+      div.innerHTML = `
+        <div class="bloco-header">
+          <span class="bloco-tipo">🖼️ Imagem</span>
+          <div class="bloco-acoes">
+            ${i>0?`<button class="bloco-btn" onclick="moverBloco(${b.id},-1)">↑</button>`:''}
+            ${i<blocos.length-1?`<button class="bloco-btn" onclick="moverBloco(${b.id},1)">↓</button>`:''}
+            <button class="bloco-btn del" onclick="removerBloco(${b.id})">✕</button>
+          </div>
+        </div>
+        <div class="bloco-body">
+          <div class="bloco-img-area">
+            <input type="file" accept="image/*" onchange="carregarImgBloco(this,${b.id})">
+            <img class="bloco-img-preview" id="bprev-${b.id}" src="${tem?b.valor:''}" style="${tem?'display:block':''}">
+            ${tem?'':`<strong>Clique para escolher a imagem</strong><p>JPG, PNG ou WebP</p>`}
+          </div>
+          ${tem?`<button class="bloco-img-clear" style="display:block" onclick="limparImgBloco(${b.id})">✕ Remover imagem</button>`:''}
+        </div>`;
+    }
+    editor.appendChild(div);
+  });
+}
+
+function carregarImgBloco(input, id) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const idx = blocos.findIndex(b => b.id === id);
+    if (idx > -1) blocos[idx].valor = e.target.result;
+    renderBlocos();
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function limparImgBloco(id) {
+  const idx = blocos.findIndex(b => b.id === id);
+  if (idx > -1) blocos[idx].valor = null;
+  renderBlocos();
+}
+
+/* ========== CURIOSIDADES ========== */
+function salvarCuriosidade() {
+  const subcatId = parseInt(document.getElementById('curio-sub').value);
+  const titulo = document.getElementById('curio-titulo').value.trim();
+  if (!subcatId || !titulo) { alert('Selecione a sub-categoria e preencha o título.'); return; }
+  if (blocos.length === 0) { alert('Adicione pelo menos um bloco de conteúdo.'); return; }
+  curiosidades.push({
+    id: uid(),
+    subcatId,
+    titulo,
+    blocos: JSON.parse(JSON.stringify(blocos))
+  });
+  document.getElementById('curio-titulo').value = '';
+  blocos = []; blocoId = 0;
+  adicionarBloco('texto');
+  if (subcatAtual && subcatAtual.id === subcatId) renderSubcat();
+  renderHome();
+  if (catAtual) renderCat();
+  showSuccess('suc-curio');
+}
+
+/* ========== SELECTS ========== */
+function atualizarSelects() {
+  // Sub-cat pai
+  const subPai = document.getElementById('sub-cat-pai');
+  subPai.innerHTML = categorias.length === 0
+    ? '<option value="">— Crie uma categoria primeiro —</option>'
+    : categorias.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+
+  // Curio cat
+  const curioCat = document.getElementById('curio-cat');
+  curioCat.innerHTML = categorias.length === 0
+    ? '<option value="">— Crie uma categoria primeiro —</option>'
+    : categorias.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  atualizarSubcatSelect();
+}
+
+function atualizarSubcatSelect() {
+  const catId = parseInt(document.getElementById('curio-cat').value);
+  const subs = subcategorias.filter(s => s.catId === catId);
+  const sel = document.getElementById('curio-sub');
+  sel.innerHTML = subs.length === 0
+    ? '<option value="">— Crie uma sub-categoria primeiro —</option>'
+    : subs.map(s => `<option value="${s.id}">${s.nome}</option>`).join('');
+}
+
+/* ========== GERENCIAR ========== */
+function renderGerenciar() {
+  // Categorias
+  const ulC = document.getElementById('ger-cats');
+  ulC.innerHTML = categorias.length === 0
+    ? '<li><span>Nenhuma categoria criada.</span></li>'
+    : categorias.map(c => `
+      <li>
+        <div><strong>${c.nome}</strong><span>${c.desc || '—'}</span></div>
+        <div class="adm-list-actions">
+          <button class="adm-btn-danger" onclick="deletarCategoria(${c.id})">✕ Excluir</button>
+        </div>
+      </li>`).join('');
+
+  // Sub-categorias
+  const ulS = document.getElementById('ger-subs');
+  ulS.innerHTML = subcategorias.length === 0
+    ? '<li><span>Nenhuma sub-categoria criada.</span></li>'
+    : subcategorias.map(s => {
+        const cat = categorias.find(c => c.id === s.catId);
+        return `
+        <li>
+          <div><strong>${s.nome}</strong><span>${cat ? cat.nome : '—'}</span></div>
+          <div class="adm-list-actions">
+            <button class="adm-btn-danger" onclick="deletarSubcat(${s.id})">✕ Excluir</button>
+          </div>
+        </li>`;
+      }).join('');
+
+  // Curiosidades
+  const ulCu = document.getElementById('ger-curios');
+  ulCu.innerHTML = curiosidades.length === 0
+    ? '<li><span>Nenhuma curiosidade publicada.</span></li>'
+    : curiosidades.map(cu => {
+        const sub = subcategorias.find(s => s.id === cu.subcatId);
+        const cat = sub ? categorias.find(c => c.id === sub.catId) : null;
+        return `
+        <li>
+          <div><strong>${cu.titulo}</strong><span>${cat ? cat.nome + ' › ' : ''}${sub ? sub.nome : '—'}</span></div>
+          <div class="adm-list-actions">
+            <button class="adm-btn-danger" onclick="deletarCuriosidade(${cu.id})">✕ Excluir</button>
+          </div>
+        </li>`;
+      }).join('');
+}
+
+function deletarCategoria(id) {
+  if (!confirm('Excluir esta categoria? As sub-categorias e curiosidades dela também serão removidas.')) return;
+  const subs = subcategorias.filter(s => s.catId === id).map(s => s.id);
+  curiosidades = curiosidades.filter(c => !subs.includes(c.subcatId));
+  subcategorias = subcategorias.filter(s => s.catId !== id);
+  categorias = categorias.filter(c => c.id !== id);
+  if (catAtual && catAtual.id === id) { catAtual = null; goHome(); }
+  else renderHome();
+  atualizarSelects();
+  renderGerenciar();
+}
+
+function deletarSubcat(id) {
+  if (!confirm('Excluir esta sub-categoria? As curiosidades dela também serão removidas.')) return;
+  curiosidades = curiosidades.filter(c => c.subcatId !== id);
+  subcategorias = subcategorias.filter(s => s.id !== id);
+  if (subcatAtual && subcatAtual.id === id) { subcatAtual = null; if (catAtual) { showView('cat'); renderCat(); } else goHome(); }
+  else if (catAtual) renderCat();
+  atualizarSelects();
+  renderGerenciar();
+}
+
+function deletarCuriosidade(id) {
+  if (!confirm('Excluir esta curiosidade?')) return;
+  curiosidades = curiosidades.filter(c => c.id !== id);
+  if (subcatAtual) renderSubcat();
+  renderHome();
+  if (catAtual) renderCat();
+  renderGerenciar();
+}
+
+/* ========== EXPORTAR ========== */
+function exportarSite() {
+  const estado = {
+    categorias: JSON.stringify(categorias),
+    subcategorias: JSON.stringify(subcategorias),
+    curiosidades: JSON.stringify(curiosidades),
+    nextId
+  };
+
+  let html = document.documentElement.outerHTML;
+
+  // Injeta os dados no script de inicialização
+  const inject = `\n/* DADOS EXPORTADOS */\nfunction carregarDadosExportados(){
+  try {
+    categorias = JSON.parse(${JSON.stringify(estado.categorias)});
+    subcategorias = JSON.parse(${JSON.stringify(estado.subcategorias)});
+    curiosidades = JSON.parse(${JSON.stringify(estado.curiosidades)});
+    nextId = ${estado.nextId};
+    renderHome();
+  } catch(e){ console.log('Erro ao carregar dados:', e); }
+}\n`;
+
+  html = html.replace('/* DADOS EXPORTADOS */', '');
+  html = html.replace('/* ========== DADOS ========== */', inject + '/* ========== DADOS ========== */');
+  html = html.replace('let nextId = 1;', 'let nextId = 1;\ndocument.addEventListener("DOMContentLoaded", carregarDadosExportados);');
+
+  // Limpa estados abertos
+  html = html.replace(/admin-overlay open/g, 'admin-overlay');
+
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'index.html'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ========== INIT ========== */
+renderHome();
+</script>
+</body>
+</html>
