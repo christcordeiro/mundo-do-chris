@@ -265,6 +265,84 @@
   .card.featured p  { font-size: 0.93rem; max-width: 540px; }
   .card.hidden { display: none; }
 
+  /* Imagem capa do card */
+  .card-cover {
+    width: calc(100% + 48px);
+    margin: -24px -24px 18px -24px;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .card.featured .card-cover { height: 220px; }
+
+  /* Editor de blocos */
+  .blocos-editor { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .bloco { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .bloco-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.03); }
+  .bloco-tipo { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+  .bloco-acoes { display: flex; gap: 6px; }
+  .bloco-btn { width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .bloco-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+  .bloco-btn.del:hover { color: #ff8080; border-color: rgba(255,80,80,0.3); }
+  .bloco-body { padding: 12px; }
+  .bloco textarea { width: 100%; background: transparent; border: none; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; line-height: 1.6; resize: vertical; min-height: 70px; outline: none; }
+  .bloco textarea::placeholder { color: var(--muted); }
+  .bloco-img-area { border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 16px; text-align: center; cursor: pointer; position: relative; transition: border-color 0.2s; }
+  .bloco-img-area:hover { border-color: rgba(255,255,255,0.35); }
+  .bloco-img-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .bloco-img-area p { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+  .bloco-img-area strong { color: var(--text); font-size: 13px; }
+  .bloco-img-preview { width: 100%; max-height: 160px; object-fit: cover; border-radius: 6px; display: none; }
+  .bloco-img-clear { font-size: 11px; color: #ff8080; background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 6px; display: none; }
+  .add-bloco-bar { display: flex; gap: 8px; margin-bottom: 14px; }
+  .add-bloco-btn { flex: 1; padding: 9px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.15); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .add-bloco-btn:hover { border-color: rgba(255,255,255,0.3); color: var(--text); background: var(--surface2); }
+  .card-block-img { width: calc(100% + 48px); margin: 0 -24px; display: block; max-height: 280px; object-fit: cover; }
+  .card-block-img.first { margin-top: -24px; border-radius: var(--radius) var(--radius) 0 0; margin-bottom: 18px; }
+  .card-block-img.mid { margin-top: 14px; margin-bottom: 14px; }
+  .card-block-p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; font-weight: 300; margin-bottom: 10px; }
+  .card-block-p:last-child { margin-bottom: 0; }
+
+  /* Upload area no admin */
+  .img-upload-area {
+    width: 100%;
+    border: 1px dashed rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 12px;
+    background: var(--surface2);
+    position: relative;
+  }
+  .img-upload-area:hover { border-color: rgba(255,255,255,0.4); }
+  .img-upload-area input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .img-upload-area .upload-icon { font-size: 1.8rem; margin-bottom: 6px; }
+  .img-upload-area p { font-size: 13px; color: var(--muted); margin: 0; }
+  .img-upload-area p strong { color: var(--text); }
+  .img-preview {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    display: none;
+  }
+  .img-remove {
+    font-size: 11px;
+    color: #ff8080;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    display: none;
+    margin-bottom: 8px;
+  }
+
   /* =========== ANIME WIKI =========== */
   .anime-section {
     position: relative;
@@ -1170,8 +1248,12 @@
           </select>
           <label class="admin-label">Título</label>
           <input class="admin-input" type="text" id="new-titulo" placeholder="Ex: O Brasil tem uma lei sobre...">
-          <label class="admin-label">Texto da curiosidade</label>
-          <textarea class="admin-textarea" id="new-texto" placeholder="Escreva o texto completo aqui..."></textarea>
+          <label class="admin-label">Conteúdo — adicione textos e imagens na ordem que quiser</label>
+          <div class="blocos-editor" id="blocos-editor"></div>
+          <div class="add-bloco-bar">
+            <button type="button" class="add-bloco-btn" onclick="adicionarBloco('texto')">✏️ Adicionar texto</button>
+            <button type="button" class="add-bloco-btn" onclick="adicionarBloco('imagem')">🖼️ Adicionar imagem</button>
+          </div>
           <label class="admin-label">Destaque? (ocupa mais espaço)</label>
           <select class="admin-select" id="new-destaque">
             <option value="nao">Não</option>
@@ -1220,6 +1302,14 @@
           <ul class="admin-list" id="manage-animes">
             <li style="color:var(--muted);font-size:13px">Nenhum anime adicionado ainda.</li>
           </ul>
+
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
+            <div class="admin-section-title">Publicar para todos</div>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">Clique em <strong style="color:var(--text)">Exportar site</strong> para baixar o arquivo atualizado com todas as suas publicações. Depois faça o upload no GitHub para que todos os visitantes vejam.</p>
+            <button class="admin-btn-primary" onclick="exportarSite()" style="display:flex;align-items:center;justify-content:center;gap:8px">
+              ⬇ Exportar site (index.html)
+            </button>
+          </div>
         </div>
 
       </div>
@@ -1446,6 +1536,7 @@ function openAdmin() {
     document.getElementById('admin-login-error').classList.remove('visible');
   }
   renderEmojiGrid();
+  if (blocos.length === 0) { adicionarBloco('texto'); }
 }
 
 function closeAdmin() {
@@ -1496,32 +1587,132 @@ function showSuccess(id) {
   setTimeout(() => el.classList.remove('visible'), 3000);
 }
 
-function addCuriosidade() {
-  const cat     = document.getElementById('new-cat').value;
-  const titulo  = document.getElementById('new-titulo').value.trim();
-  const texto   = document.getElementById('new-texto').value.trim();
-  const destaque = document.getElementById('new-destaque').value === 'sim';
+/* ---- EDITOR DE BLOCOS ---- */
+let blocos = [];
+let blocoId = 0;
 
-  if (!titulo || !texto) { alert('Preencha o título e o texto.'); return; }
+function adicionarBloco(tipo, dados) {
+  const id = blocoId++;
+  blocos.push({ id, tipo, valor: dados || null });
+  renderBlocos();
+}
 
+function removerBloco(id) {
+  blocos = blocos.filter(b => b.id !== id);
+  renderBlocos();
+}
+
+function moverBloco(id, dir) {
+  const idx = blocos.findIndex(b => b.id === id);
+  const novo = idx + dir;
+  if (novo < 0 || novo >= blocos.length) return;
+  [blocos[idx], blocos[novo]] = [blocos[novo], blocos[idx]];
+  renderBlocos();
+}
+
+function renderBlocos() {
+  const editor = document.getElementById('blocos-editor');
+  editor.innerHTML = '';
+  blocos.forEach((b, i) => {
+    const div = document.createElement('div');
+    div.className = 'bloco';
+    div.dataset.id = b.id;
+    if (b.tipo === 'texto') {
+      div.innerHTML = `
+        <div class="bloco-header">
+          <span class="bloco-tipo">✏️ Texto</span>
+          <div class="bloco-acoes">
+            ${i > 0 ? `<button class="bloco-btn" onclick="moverBloco(${b.id},-1)" title="Mover para cima">↑</button>` : ''}
+            ${i < blocos.length-1 ? `<button class="bloco-btn" onclick="moverBloco(${b.id},1)" title="Mover para baixo">↓</button>` : ''}
+            <button class="bloco-btn del" onclick="removerBloco(${b.id})" title="Remover">✕</button>
+          </div>
+        </div>
+        <div class="bloco-body">
+          <textarea placeholder="Escreva o texto aqui..." onchange="blocos[${i}].valor=this.value" oninput="blocos[${i}].valor=this.value">${b.valor||''}</textarea>
+        </div>`;
+    } else {
+      const temImg = b.valor && b.valor.startsWith('data:');
+      div.innerHTML = `
+        <div class="bloco-header">
+          <span class="bloco-tipo">🖼️ Imagem</span>
+          <div class="bloco-acoes">
+            ${i > 0 ? `<button class="bloco-btn" onclick="moverBloco(${b.id},-1)" title="Mover para cima">↑</button>` : ''}
+            ${i < blocos.length-1 ? `<button class="bloco-btn" onclick="moverBloco(${b.id},1)" title="Mover para baixo">↓</button>` : ''}
+            <button class="bloco-btn del" onclick="removerBloco(${b.id})" title="Remover">✕</button>
+          </div>
+        </div>
+        <div class="bloco-body">
+          <div class="bloco-img-area" id="imgarea-${b.id}">
+            <input type="file" accept="image/*" onchange="carregarImgBloco(this,${b.id})">
+            <img class="bloco-img-preview" id="imgprev-${b.id}" src="${temImg ? b.valor : ''}" style="${temImg?'display:block':''}">
+            ${temImg ? '' : '<strong>Clique para escolher a imagem</strong><p>JPG, PNG ou WebP</p>'}
+          </div>
+          ${temImg ? `<button class="bloco-img-clear" style="display:block" onclick="limparImgBloco(${b.id})">✕ Remover imagem</button>` : ''}
+        </div>`;
+    }
+    editor.appendChild(div);
+  });
+}
+
+function carregarImgBloco(input, id) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const idx = blocos.findIndex(b => b.id === id);
+    if (idx > -1) blocos[idx].valor = e.target.result;
+    renderBlocos();
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function limparImgBloco(id) {
+  const idx = blocos.findIndex(b => b.id === id);
+  if (idx > -1) blocos[idx].valor = null;
+  renderBlocos();
+}
+
+function buildCardHTML(titulo, blocos, cat, destaque) {
   const catEmoji = {juridico:'⚖️', historia:'📜', futebol:'⚽'};
   const catLabel = {juridico:'Jurídico', historia:'História', futebol:'Futebol'};
-
-  const article = document.createElement('article');
-  article.className = 'card' + (destaque ? ' featured' : '');
-  article.dataset.cat = cat;
-  article.innerHTML = `
+  let inner = '';
+  let isFirst = true;
+  blocos.forEach(b => {
+    if (b.tipo === 'imagem' && b.valor) {
+      const cls = isFirst ? 'first' : 'mid';
+      inner += `<img class="card-block-img ${cls}" src="${b.valor}" alt="">`;
+      isFirst = false;
+    } else if (b.tipo === 'texto' && b.valor && b.valor.trim()) {
+      inner += `<p class="card-block-p">${b.valor.trim()}</p>`;
+      isFirst = false;
+    }
+  });
+  return `
+  <article class="card${destaque?' featured':''}" data-cat="${cat}">
     <div class="card-accent"></div>
     <span class="card-tag">${catEmoji[cat]} ${catLabel[cat]}</span>
     <h3>${titulo}</h3>
-    <p>${texto}</p>`;
+    ${inner}
+  </article>`;
+}
 
-  document.getElementById('grid').appendChild(article);
+function addCuriosidade() {
+  const cat     = document.getElementById('new-cat').value;
+  const titulo  = document.getElementById('new-titulo').value.trim();
+  const destaque = document.getElementById('new-destaque').value === 'sim';
 
-  novasCuriosidades.push({ cat, titulo, texto, destaque });
+  if (!titulo) { alert('Preencha o título.'); return; }
+  if (blocos.length === 0) { alert('Adicione pelo menos um bloco de texto ou imagem.'); return; }
+
+  const html = buildCardHTML(titulo, blocos, cat, destaque);
+  document.getElementById('grid').insertAdjacentHTML('beforeend', html);
+  novasCuriosidades.push({ cat, titulo, destaque, blocos: JSON.parse(JSON.stringify(blocos)) });
 
   document.getElementById('new-titulo').value = '';
-  document.getElementById('new-texto').value = '';
+  blocos = [];
+  blocoId = 0;
+  renderBlocos();
+  // Adiciona bloco de texto inicial vazio
+  adicionarBloco('texto');
   showSuccess('suc-curiosidade');
 }
 
@@ -1625,6 +1816,45 @@ function deleteAnime(i) {
     renderAnimes(filteredAnimes());
   }
   renderManage();
+}
+
+function exportarSite() {
+  // Pega o HTML atual da página inteiro
+  let html = document.documentElement.outerHTML;
+
+  // Injeta as curiosidades novas diretamente antes do div#empty
+  if (novasCuriosidades.length > 0) {
+    const novosCards = novasCuriosidades.map(c => buildCardHTML(c.titulo, c.blocos, c.cat, c.destaque)).join('\n');
+    html = html.replace('<div class="empty" id="empty">', novosCards + '\n  <div class="empty" id="empty">');
+  }
+
+  // Injeta os novos animes no array de animes no código
+  if (novosAnimes.length > 0) {
+    const animesParaInjetar = novosAnimes.map(a => {
+      return `{
+    id:${a.id}, titulo:${JSON.stringify(a.titulo)}, subtitulo:${JSON.stringify(a.subtitulo)}, emoji:${JSON.stringify(a.emoji)}, cor:"#ffffff",
+    ano:${JSON.stringify(a.ano)}, episodios:${JSON.stringify(a.episodios)}, nota:${JSON.stringify(a.nota)},
+    generos:${JSON.stringify(a.generos)}, generoLabels:${JSON.stringify(a.generoLabels)},
+    sinopse:${JSON.stringify(a.sinopse)},
+    personagens:[],
+    curiosidades:${JSON.stringify(a.curiosidades)}
+  }`;
+    }).join(',\n');
+    // Adiciona após o último anime fixo (antes do fechamento do array)
+    html = html.replace(/(\];)\s*\n(\s*let generoAtivo)/, `,\n  ${animesParaInjetar}\n$1\n$2`);
+  }
+
+  // Remove o estado "open" do admin se estiver aberto
+  html = html.replace(/admin-overlay open/g, 'admin-overlay');
+  html = html.replace(/wiki-overlay open/g, 'wiki-overlay');
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'index.html';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 </script>
 </body>
