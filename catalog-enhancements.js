@@ -4,13 +4,32 @@
   function esc(v){return String(v==null?'':v).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}
   function safeUrl(v){v=String(v||'').trim();if(!v)return '';try{var u=new URL(v,location.href);return /^https?:$/.test(u.protocol)?u.href:'';}catch(e){return '';}}
   function openLink(node){var u=safeUrl(node&&node.externalUrl);if(!u)return;var w=window.open(u,'_blank','noopener,noreferrer');if(w)w.opener=null;}
+  function firstImg(card){if(!card)return null;return card.querySelector('img');}
+  function ensureThumb(card,node){
+    if(!card||!node)return;
+    var img=firstImg(card),src=(node.img||'').trim();
+    if(img){
+      if(src&&!img.getAttribute('src'))img.src=src;
+      if(src&&img.src!==src&&(!img.complete||img.naturalWidth===0))img.src=src;
+      img.onerror=function(){this.onerror=null;if(src&&this.src!==src)this.src=src;};
+      return;
+    }
+    if(!src)return;
+    var target=card.querySelector('.cat-card-img,.item-img,.thumb,.thumbnail,.cover,.poster')||card;
+    var el=document.createElement('img');
+    el.src=src;
+    el.alt=node.nome||'';
+    el.loading='lazy';
+    el.style.width='100%';el.style.height='100%';el.style.objectFit='cover';el.style.display='block';
+    if(target===card)card.insertBefore(el,card.firstChild);else target.appendChild(el);
+  }
   function patchRenderedLinks(){
     var grid=document.getElementById('cats-grid');
-    if(grid){[].forEach.call(grid.children,function(card,i){var n=cats[i];if(!n||!n.externalUrl)return;var b=card.querySelector('.wiki-node-badge'),m=card.querySelector('.cat-card-count');if(b)b.textContent='LINK';if(m)m.textContent='Abrir link';card.onclick=function(e){e.preventDefault();openLink(n);};});}
-    if(curCat){var roots=subs.filter(function(s){return s.catId===curCat.id&&!s.parentId}),list=document.getElementById('subcats-list');if(list){[].forEach.call(list.children,function(row,i){var n=roots[i];if(!n||!n.externalUrl)return;var b=row.querySelector('.wiki-node-badge'),m=row.querySelector('.item-count');if(b)b.textContent='LINK';if(m)m.textContent='Abrir link';row.onclick=function(e){e.preventDefault();openLink(n);};});}}
-    if(curSub){var nodes=subs.filter(function(s){return (s.parentId||null)===curSub.id}),list2=document.getElementById('temas-list');if(list2){[].forEach.call(list2.children,function(row,i){var n=nodes[i];if(!n||!n.externalUrl)return;var b=row.querySelector('.wiki-node-badge'),m=row.querySelector('.item-count');if(b)b.textContent='LINK';if(m)m.textContent='Abrir link';row.onclick=function(e){e.preventDefault();openLink(n);};});}}
+    if(grid){[].forEach.call(grid.children,function(card,i){var n=cats[i];if(!n)return;ensureThumb(card,n);if(!n.externalUrl)return;var b=card.querySelector('.wiki-node-badge'),m=card.querySelector('.cat-card-count');if(b)b.textContent='LINK';if(m)m.textContent='Abrir link';card.onclick=function(e){e.preventDefault();openLink(n);};});}
+    if(curCat){var roots=subs.filter(function(s){return s.catId===curCat.id&&!s.parentId}),list=document.getElementById('subcats-list');if(list){[].forEach.call(list.children,function(row,i){var n=roots[i];if(!n)return;ensureThumb(row,n);if(!n.externalUrl)return;var b=row.querySelector('.wiki-node-badge'),m=row.querySelector('.item-count');if(b)b.textContent='LINK';if(m)m.textContent='Abrir link';row.onclick=function(e){e.preventDefault();openLink(n);};});}}
+    if(curSub){var nodes=subs.filter(function(s){return (s.parentId||null)===curSub.id}),list2=document.getElementById('temas-list');if(list2){[].forEach.call(list2.children,function(row,i){var n=nodes[i];if(!n)return;ensureThumb(row,n);if(!n.externalUrl)return;var b=row.querySelector('.wiki-node-badge'),m=row.querySelector('.item-count');if(b)b.textContent='LINK';if(m)m.textContent='Abrir link';row.onclick=function(e){e.preventDefault();openLink(n);};});}}
   }
-  function wrapRender(name){var old=window[name];if(typeof old!=='function')return;window[name]=function(){var r=old.apply(this,arguments);patchRenderedLinks();return r;};}
+  function wrapRender(name){var old=window[name];if(typeof old!=='function')return;window[name]=function(){var r=old.apply(this,arguments);setTimeout(patchRenderedLinks,0);return r;};}
   function ensureCreateFields(){
     var types=document.querySelector('.wiki-node-type');if(!types||document.querySelector('input[name="wiki-node-type"][value="link"]'))return;
     var lab=document.createElement('label');lab.innerHTML='<input type="radio" name="wiki-node-type" value="link" onchange="wikiAlternarTipo()"> 🔗 Link externo';types.appendChild(lab);
@@ -29,9 +48,9 @@
   };
   function addEditLink(node,button){var host=document.getElementById('edit-body')||document.querySelector('#edit-overlay .edit-body')||document.querySelector('#edit-overlay .adm-modal-body');if(!host||document.getElementById(EDIT_LINK_ID))return;var lbl=document.createElement('label');lbl.className='f-label';lbl.textContent='Link externo (opcional)';var inp=document.createElement('input');inp.className='f-input';inp.id=EDIT_LINK_ID;inp.placeholder='https://...';inp.value=node.externalUrl||'';if(button){host.insertBefore(lbl,button);host.insertBefore(inp,button);}else{host.appendChild(lbl);host.appendChild(inp);}}
   var oldEditCat=window.editarCat;window.editarCat=function(id){oldEditCat(id);setTimeout(function(){var n=cats.find(function(x){return x.id===id});var btn=document.querySelector('#edit-overlay .btn-primary');if(n)addEditLink(n,btn);},0);};
-  var oldSaveCat=window.salvarEditCat;window.salvarEditCat=function(id){var n=cats.find(function(x){return x.id===id}),el=document.getElementById(EDIT_LINK_ID);if(n&&el){var raw=el.value.trim();n.externalUrl=raw?safeUrl(raw):'';n.itemType=n.externalUrl?'link':(n.itemType==='link'?null:n.itemType);if(raw&&!n.externalUrl){alert('O link externo precisa começar com http:// ou https://.');return;}}return oldSaveCat(id);};
+  var oldSaveCat=window.salvarEditCat;window.salvarEditCat=function(id){var n=cats.find(function(x){return x.id===id}),el=document.getElementById(EDIT_LINK_ID);if(n&&el){var raw=el.value.trim();n.externalUrl=raw?safeUrl(raw):'';n.itemType=n.externalUrl?'link':(n.itemType==='link'?null:n.itemType);if(raw&&!n.externalUrl){alert('O link externo precisa começar com http:// ou https://.');return;}}var r=oldSaveCat(id);setTimeout(patchRenderedLinks,0);return r;};
   var oldEditSub=window.editarSub;window.editarSub=function(id){oldEditSub(id);setTimeout(function(){var n=subs.find(function(x){return x.id===id});var btn=document.querySelector('#edit-overlay .btn-primary');if(n)addEditLink(n,btn);},0);};
-  var oldSaveSub=window.salvarEditSub;window.salvarEditSub=function(id){var n=subs.find(function(x){return x.id===id}),el=document.getElementById(EDIT_LINK_ID);if(n&&el){var raw=el.value.trim();n.externalUrl=raw?safeUrl(raw):'';n.itemType=n.externalUrl?'link':(n.itemType==='link'?null:n.itemType);if(raw&&!n.externalUrl){alert('O link externo precisa começar com http:// ou https://.');return;}}return oldSaveSub(id);};
+  var oldSaveSub=window.salvarEditSub;window.salvarEditSub=function(id){var n=subs.find(function(x){return x.id===id}),el=document.getElementById(EDIT_LINK_ID);if(n&&el){var raw=el.value.trim();n.externalUrl=raw?safeUrl(raw):'';n.itemType=n.externalUrl?'link':(n.itemType==='link'?null:n.itemType);if(raw&&!n.externalUrl){alert('O link externo precisa começar com http:// ou https://.');return;}}var r=oldSaveSub(id);setTimeout(patchRenderedLinks,0);return r;};
   wrapRender('renderHome');wrapRender('renderCat');wrapRender('renderSub');
   var oldOpen=window.openAdm;if(typeof oldOpen==='function')window.openAdm=function(){var r=oldOpen.apply(this,arguments);setTimeout(function(){ensureCreateFields();wikiAlternarTipo();},0);return r;};
   document.addEventListener('DOMContentLoaded',function(){ensureCreateFields();wikiAlternarTipo();setTimeout(patchRenderedLinks,0);});
